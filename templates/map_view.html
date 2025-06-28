@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <title>{{ project }} - MapNS Pro</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { height: 500px; margin-top: 20px; }
+        #project-name { font-weight: bold; margin-top: 10px; }
+        #message { color: red; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div id="project-name">プロジェクト名: {{ project }}</div>
+
+    {% if message %}
+    <div id="message">{{ message }}</div>
+    {% endif %}
+
+    <h1>写真を追加</h1>
+    <form method="POST" enctype="multipart/form-data">
+        写真: <input type="file" name="photo" required>
+        コメント: <input type="text" name="comment">
+        <button type="submit">送信</button>
+    </form>
+
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([35.0, 135.0], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        {% for m in markers %}
+            var marker = L.marker([{{ m.lat }}, {{ m.lon }}]).addTo(map);
+            marker.bindPopup("<b>{{ m.comment }}</b><br>撮影日時: {{ m.date }}<br><img src='{{ url_for('uploaded_file', filename=m.filename) }}' width='200'>");
+        {% endfor %}
+    </script>
+</body>
+</html>

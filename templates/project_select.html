@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>MapNS Pro - プロジェクト選択</title>
+</head>
+<body>
+    <h1>プロジェクトを選んでください</h1>
+    <form method="POST">
+        <label>新規プロジェクト名: <input type="text" name="project_name" required></label>
+        <button type="submit">作成</button>
+    </form>
+    <h2>または既存プロジェクトを選ぶ</h2>
+    <ul>
+        {% for p in projects %}
+        <li><a href="{{ url_for('map_view', project=p) }}">{{ p }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
